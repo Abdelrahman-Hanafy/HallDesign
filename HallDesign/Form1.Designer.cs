@@ -38,7 +38,11 @@ namespace HallDesign
             this.clear = new System.Windows.Forms.Button();
             this.cols = new System.Windows.Forms.TextBox();
             this.rows = new System.Windows.Forms.TextBox();
-            this.drawChairs = new System.Windows.Forms.Button();
+            this.angle = new System.Windows.Forms.TextBox();
+            this.save = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.colorBalet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.black)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellow)).BeginInit();
@@ -121,45 +125,77 @@ namespace HallDesign
             // 
             // cols
             // 
-            this.cols.Enabled = false;
-            this.cols.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.cols.Location = new System.Drawing.Point(424, 12);
+            this.cols.ForeColor = System.Drawing.Color.Black;
+            this.cols.Location = new System.Drawing.Point(612, 10);
             this.cols.Name = "cols";
             this.cols.Size = new System.Drawing.Size(147, 26);
             this.cols.TabIndex = 3;
-            this.cols.Text = "Num of Columns";
-            this.cols.Enter += new System.EventHandler(this.cols_Enter);
-            this.cols.Leave += new System.EventHandler(this.cols_Leave);
+            this.cols.Text = "0";
             // 
             // rows
             // 
-            this.rows.Enabled = false;
-            this.rows.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.rows.Location = new System.Drawing.Point(577, 10);
+            this.rows.ForeColor = System.Drawing.Color.Black;
+            this.rows.Location = new System.Drawing.Point(823, 10);
             this.rows.Name = "rows";
             this.rows.Size = new System.Drawing.Size(147, 26);
             this.rows.TabIndex = 4;
-            this.rows.Text = "Num of Rows";
-            this.rows.Enter += new System.EventHandler(this.rows_Enter);
-            this.rows.Leave += new System.EventHandler(this.rows_Leave);
+            this.rows.Text = "0";
             // 
-            // drawChairs
+            // angle
             // 
-            this.drawChairs.Enabled = false;
-            this.drawChairs.Location = new System.Drawing.Point(730, 7);
-            this.drawChairs.Name = "drawChairs";
-            this.drawChairs.Size = new System.Drawing.Size(75, 30);
-            this.drawChairs.TabIndex = 5;
-            this.drawChairs.Text = "Set";
-            this.drawChairs.UseVisualStyleBackColor = true;
-            this.drawChairs.Click += new System.EventHandler(this.drawChairs_Click);
+            this.angle.Location = new System.Drawing.Point(460, 9);
+            this.angle.Name = "angle";
+            this.angle.Size = new System.Drawing.Size(100, 26);
+            this.angle.TabIndex = 6;
+            this.angle.Text = "0";
+            // 
+            // save
+            // 
+            this.save.Location = new System.Drawing.Point(259, 7);
+            this.save.Name = "save";
+            this.save.Size = new System.Drawing.Size(75, 32);
+            this.save.TabIndex = 8;
+            this.save.Text = "Save";
+            this.save.UseVisualStyleBackColor = true;
+            this.save.Click += new System.EventHandler(this.save_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(404, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 20);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Angle";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(566, 15);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(40, 20);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Cols";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(766, 13);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(49, 20);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Rows";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 584);
-            this.Controls.Add(this.drawChairs);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.save);
+            this.Controls.Add(this.angle);
             this.Controls.Add(this.rows);
             this.Controls.Add(this.cols);
             this.Controls.Add(this.clear);
@@ -189,7 +225,11 @@ namespace HallDesign
         private System.Windows.Forms.Button clear;
         private System.Windows.Forms.TextBox cols;
         private System.Windows.Forms.TextBox rows;
-        private System.Windows.Forms.Button drawChairs;
+        private System.Windows.Forms.TextBox angle;
+        private System.Windows.Forms.Button save;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
 
