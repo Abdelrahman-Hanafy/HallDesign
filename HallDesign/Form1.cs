@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using System.Windows.Shapes;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace HallDesign
 {
@@ -21,6 +23,7 @@ namespace HallDesign
       
         Rectangle current;
         Rectangle selected;
+        Polygon ply;
 
         Block toRotate;
         List<Block> blocks;
@@ -36,11 +39,6 @@ namespace HallDesign
             curser = new Pen(Color.Black,5);
 
             blocks = new List<Block>();
-            
-            bmp = new Bitmap(canvas.Width,canvas.Height);
-            canvas.DrawToBitmap(bmp, new Rectangle(0, 0, canvas.Width, canvas.Height));
-
-            
 
             db = DataBase.ConnectDB();
             
@@ -117,13 +115,7 @@ namespace HallDesign
 
         private void finish_Click(object sender, EventArgs e)
         {
-            foreach (Block blk in blocks)
-            {
-                using (Graphics gg = Graphics.FromImage(bmp))
-                {
-                    drawRect(gg, blk.r, blk.a);
-                }
-            }
+            
             painting = !painting;
         }
 
@@ -148,8 +140,7 @@ namespace HallDesign
                         selected = blk.r;
                         toRotate = blk;
                         updateScreen();
-                        //g.DrawRectangle(Pens.Blue, Rectangle.Round(selected));
-                        drawRect(selected,blk.a);
+                        //drawRect(selected,blk.a);
                         TextRenderer.DrawText(g, $"X:{blk.w},Y:{blk.h}", new Font("Arial", 12, FontStyle.Bold), selected, Color.Red);
                         return;
                     }
@@ -159,6 +150,36 @@ namespace HallDesign
 
         private void save_Click(object sender, EventArgs e)
         {
+            bmp = new Bitmap(canvas.Width, canvas.Height);
+            canvas.DrawToBitmap(bmp, new Rectangle(0, 0, canvas.Width, canvas.Height));
+
+            foreach (Block blk in blocks)
+            {
+                using (Graphics gg = Graphics.FromImage(bmp))
+                {
+                    curser.Color = blk.c;
+                    if (blk.a == 0)
+                    {
+                        drawRect(gg, blk.r, blk.a);
+                    }
+                    else
+                    {
+                        int shift = 5 * toRotate.h;
+                        if (blk.a < 0)
+                        {
+                            shift *= -1;
+                        }
+
+
+                        Point lb = new Point(blk.r.Left, blk.r.Bottom),
+                              rb = new Point(blk.r.Right, blk.r.Bottom),
+                              lt = new Point(blk.r.Left + shift, blk.r.Top),
+                              rt = new Point(blk.r.Right + shift, blk.r.Top);
+                        gg.DrawPolygon(curser, new PointF[] { lb, rb, rt, lt });
+                    }
+                }
+            }
+
             try
             {
                 string n = name.Text;
@@ -197,9 +218,27 @@ namespace HallDesign
            
             foreach (Block blk in blocks)
             {
-                curser.Color = blk.c;
-                drawRect(blk.r, blk.a);
                 
+                curser.Color = blk.c;
+                if (blk.a == 0)
+                {
+                    drawRect(blk.r, blk.a);
+                }
+                else
+                {
+                    int shift = 5 * toRotate.h;
+                    if (blk.a < 0)
+                    {
+                        shift *= -1;
+                    }
+
+
+                    Point lb = new Point(blk.r.Left, blk.r.Bottom),
+                          rb = new Point(blk.r.Right, blk.r.Bottom),
+                          lt = new Point(blk.r.Left + shift, blk.r.Top),
+                          rt = new Point(blk.r.Right + shift, blk.r.Top);
+                    g.DrawPolygon(curser, new PointF[] { lb, rb, rt, lt });
+                }
             }
 
         }
@@ -254,20 +293,9 @@ namespace HallDesign
                 try
                 {
                     int Angle = int.Parse(ang.Text);
-                    //toRotate.a = Angle;
+                    toRotate.a = Angle;
                     updateScreen();
-                    int shift = 5 * toRotate.h;
-                    if (Angle < 0)
-                    {
-                        shift *= -1;
-                    }
-
                     
-                    Point lb = new Point(selected.Left,selected.Bottom),
-                          rb = new Point(selected.Right,selected.Bottom),
-                          lt = new Point(selected.Left + shift, selected.Top),
-                          rt = new Point(selected.Right + shift, selected.Top);
-                    g.DrawPolygon(curser,new PointF[] { lb,rb , rt ,lt });
                 }
                 catch (Exception)
                 {
