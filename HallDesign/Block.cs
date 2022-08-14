@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HallDesign
 {
-    class Block
+    public class Block
     {
         public Rectangle r { get; }
         public Color c { get; set; }

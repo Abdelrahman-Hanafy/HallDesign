@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HallDesign
@@ -17,6 +12,7 @@ namespace HallDesign
     {
         Graphics g;
         Pen curser;
+        DataBase db;
 
         bool curserMoving = false;
         bool painting = true;
@@ -35,15 +31,28 @@ namespace HallDesign
 
         public Form1()
         {
+           // this.WindowState = FormWindowState.Maximized;
             InitializeComponent();
-            
+            //canvas.Size = new Size(,); 
+
+            width = this.Size.Width;
+            height = this.Size.Height;
+
+            canvas.Size = new Size(width, height);
+
             g = canvas.CreateGraphics();
+            
             curser = new Pen(Color.Black,5);
 
             blocks = new List<Block>();
             
             bmp = new Bitmap(canvas.Width,canvas.Height);
             canvas.DrawToBitmap(bmp, new Rectangle(0, 0, canvas.Width, canvas.Height));
+
+            
+
+            db = DataBase.ConnectDB();
+            
         }
 
         private void color_Click(object sender, EventArgs e)
@@ -64,35 +73,40 @@ namespace HallDesign
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             curserMoving = false;
-
-            try
+            if (painting)
             {
-                width = int.Parse(cols.Text);
-                height = int.Parse(rows.Text);
-
-                if (painting)
+                try
                 {
-                    foreach (Block rect in blocks)
+                    //width = int.Parse(cols.Text);
+                    //height = int.Parse(rows.Text);
+
+                    if (painting)
                     {
-                        if (isOverlap(rect.r))
+                        foreach (Block rect in blocks)
                         {
-                            MessageBox.Show("Can not add this rectangle as it overlap with drawn one!!");
-                            updateScreen();
-                            return;
+                            if (isOverlap(rect.r))
+                            {
+                                MessageBox.Show("Can not add this rectangle as it overlap with drawn one!!");
+                                updateScreen();
+                                return;
+                            }
                         }
+
+                        blocks.Add(new Block(current, curser.Color, current.Width/20, current.Height/20, currentAng));
+                        rows.Text = "0";
+                        cols.Text = "0";
+                        
                     }
 
-                    blocks.Add(new Block(current,curser.Color,width,height,currentAng));
-                    //drawRect(current, currentAng);
 
                 }
-
+                catch (Exception)
+                {
+                    MessageBox.Show("Provide the full data about the block!!");
+                    updateScreen();
+                }
             }
-            catch (Exception)
-            {
-                MessageBox.Show("Provide the full data about the block!!");
-                return;
-            }
+            
 
         }
 
@@ -104,18 +118,29 @@ namespace HallDesign
                 Rectangle r = new Rectangle();
                 r.X = Math.Min(st.X, e.X);
                 r.Y = Math.Min(st.Y, e.Y);
-                r.Width = Math.Abs(st.X - e.X);
-                r.Height = Math.Abs(st.Y - e.Y);
+                r.Width = (Math.Abs(st.X - e.X) / 20) * 20;
+                r.Height = (Math.Abs(st.Y - e.Y) / 20) * 20;
 
+                rows.Text = r.Width.ToString();
                 current = r;
+                updateScreen();
                 drawRect(r, currentAng);
+                
             }
         }
 
         private void finish_Click(object sender, EventArgs e)
         {
-            updateScreen();
-            painting = false;
+            foreach (Block blk in blocks)
+            {
+                //curser.Color = blk.c;
+                //drawRect(blk.r, blk.a);
+                using (Graphics gg = Graphics.FromImage(bmp))
+                {
+                    drawRect(gg, blk.r, blk.a);
+                }
+            }
+            painting = !painting;
         }
 
         private void clear_Click(object sender, EventArgs e)
@@ -131,14 +156,13 @@ namespace HallDesign
         {
             if (!painting)
             {
-                //drawChairs.Enabled = true;
                 Point click = e.Location;
                 foreach (Block blk in blocks)
                 {
                     if (blk.r.Contains(click))
                     {
                         selected = blk.r;
-                        finish_Click(sender, e);
+                        updateScreen();
                         g.DrawRectangle(Pens.Blue, Rectangle.Round(selected));
                         TextRenderer.DrawText(g, $"X:{blk.w},Y:{blk.h}", new Font("Arial", 12, FontStyle.Bold), selected, Color.Red);
                         return;
@@ -151,10 +175,21 @@ namespace HallDesign
         {
             try
             {
+                string n = name.Text;
+                if (n.Length < 1) throw new Exception(); 
                 if (!painting)
                 {
-                    bmp.Save("./Panels/demo.jpg", ImageFormat.Png);
+                    DataTable tb = db.addHall(n);
+                    string id = tb.Rows[0]["ID"].ToString();
+                    foreach (Block blk in blocks)
+                    {
+                        db.addBlock(id, blk);
+                    }
+
+                    bmp.Save(@"E:\Work\Bibliotheca\FormProjects\POS\POS\Image\"+n+".jpg", ImageFormat.Png);
+                    
                     MessageBox.Show("Saved Without errors");
+                    clear_Click(sender, e);
                 }
                 else
                 {
@@ -162,9 +197,9 @@ namespace HallDesign
                 }
                 
             }
-            catch (Exception)
+            catch (Exception E)
             {
-                MessageBox.Show("Error will saving");
+                MessageBox.Show("Error will saving" + E.ToString());
 
             }
         }
@@ -174,16 +209,11 @@ namespace HallDesign
         {
             g.Clear(Color.White);
            
-
             foreach (Block blk in blocks)
             {
                 curser.Color = blk.c;
                 drawRect(blk.r, blk.a);
-                using (Graphics gg = Graphics.FromImage(bmp))
-                {
-                    drawRect(gg, blk.r,blk.a);
-                    //gg.DrawRectangle(curser, blk.r);
-                }
+                
             }
 
         }

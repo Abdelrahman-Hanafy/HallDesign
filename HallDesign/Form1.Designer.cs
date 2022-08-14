@@ -43,6 +43,8 @@ namespace HallDesign
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.name = new System.Windows.Forms.TextBox();
+            this.n = new System.Windows.Forms.Label();
             this.colorBalet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.black)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellow)).BeginInit();
@@ -51,12 +53,15 @@ namespace HallDesign
             // 
             // canvas
             // 
+            this.canvas.AutoSize = true;
+            this.canvas.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.canvas.BackColor = System.Drawing.Color.White;
-            this.canvas.Location = new System.Drawing.Point(1, 46);
+            this.canvas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.canvas.Location = new System.Drawing.Point(0, 0);
             this.canvas.Margin = new System.Windows.Forms.Padding(5);
             this.canvas.Name = "canvas";
             this.canvas.Padding = new System.Windows.Forms.Padding(5);
-            this.canvas.Size = new System.Drawing.Size(980, 533);
+            this.canvas.Size = new System.Drawing.Size(982, 584);
             this.canvas.TabIndex = 0;
             this.canvas.MouseClick += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseClick);
             this.canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseDown);
@@ -126,26 +131,26 @@ namespace HallDesign
             // cols
             // 
             this.cols.ForeColor = System.Drawing.Color.Black;
-            this.cols.Location = new System.Drawing.Point(612, 10);
+            this.cols.Location = new System.Drawing.Point(936, 9);
             this.cols.Name = "cols";
-            this.cols.Size = new System.Drawing.Size(147, 26);
+            this.cols.Size = new System.Drawing.Size(34, 26);
             this.cols.TabIndex = 3;
-            this.cols.Text = "0";
+            this.cols.Text = "NA";
             // 
             // rows
             // 
             this.rows.ForeColor = System.Drawing.Color.Black;
-            this.rows.Location = new System.Drawing.Point(823, 10);
+            this.rows.Location = new System.Drawing.Point(850, 9);
             this.rows.Name = "rows";
-            this.rows.Size = new System.Drawing.Size(147, 26);
+            this.rows.Size = new System.Drawing.Size(34, 26);
             this.rows.TabIndex = 4;
-            this.rows.Text = "0";
+            this.rows.Text = "NA";
             // 
             // angle
             // 
-            this.angle.Location = new System.Drawing.Point(460, 9);
+            this.angle.Location = new System.Drawing.Point(755, 10);
             this.angle.Name = "angle";
-            this.angle.Size = new System.Drawing.Size(100, 26);
+            this.angle.Size = new System.Drawing.Size(34, 26);
             this.angle.TabIndex = 6;
             this.angle.Text = "0";
             // 
@@ -162,7 +167,7 @@ namespace HallDesign
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(404, 15);
+            this.label1.Location = new System.Drawing.Point(699, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 20);
             this.label1.TabIndex = 9;
@@ -171,7 +176,7 @@ namespace HallDesign
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(566, 15);
+            this.label2.Location = new System.Drawing.Point(890, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(40, 20);
             this.label2.TabIndex = 10;
@@ -180,31 +185,51 @@ namespace HallDesign
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(766, 13);
+            this.label3.Location = new System.Drawing.Point(795, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(49, 20);
             this.label3.TabIndex = 11;
             this.label3.Text = "Rows";
+            // 
+            // name
+            // 
+            this.name.Location = new System.Drawing.Point(564, 10);
+            this.name.Name = "name";
+            this.name.Size = new System.Drawing.Size(129, 26);
+            this.name.TabIndex = 12;
+            // 
+            // n
+            // 
+            this.n.AutoSize = true;
+            this.n.Location = new System.Drawing.Point(507, 16);
+            this.n.Name = "n";
+            this.n.Size = new System.Drawing.Size(51, 20);
+            this.n.TabIndex = 13;
+            this.n.Text = "Name";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 584);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.n);
+            this.Controls.Add(this.name);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.save);
             this.Controls.Add(this.angle);
             this.Controls.Add(this.rows);
             this.Controls.Add(this.cols);
             this.Controls.Add(this.clear);
-            this.Controls.Add(this.canvas);
             this.Controls.Add(this.finish);
             this.Controls.Add(this.colorBalet);
+            this.Controls.Add(this.canvas);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Hall Design";
+            this.TopMost = true;
             this.colorBalet.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.black)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellow)).EndInit();
@@ -230,6 +255,8 @@ namespace HallDesign
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox name;
+        private System.Windows.Forms.Label n;
     }
 }
 
