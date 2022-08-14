@@ -18,27 +18,18 @@ namespace HallDesign
         bool painting = true;
 
         Point st;
-        float currentAng=0;
-        int width=0;
-        int height=0;
-        
+      
         Rectangle current;
         Rectangle selected;
 
+        Block toRotate;
         List<Block> blocks;
 
         Bitmap bmp;
 
         public Form1()
         {
-           // this.WindowState = FormWindowState.Maximized;
             InitializeComponent();
-            //canvas.Size = new Size(,); 
-
-            width = this.Size.Width;
-            height = this.Size.Height;
-
-            canvas.Size = new Size(width, height);
 
             g = canvas.CreateGraphics();
             
@@ -65,7 +56,6 @@ namespace HallDesign
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
             curserMoving = true;
-            currentAng = int.Parse(angle.Text);
             st = e.Location;
 
         }
@@ -92,10 +82,7 @@ namespace HallDesign
                             }
                         }
 
-                        blocks.Add(new Block(current, curser.Color, current.Width/20, current.Height/20, currentAng));
-                        rows.Text = "0";
-                        cols.Text = "0";
-                        
+                        blocks.Add(new Block(current, curser.Color, current.Width/20, current.Height/20, 0));                     
                     }
 
 
@@ -121,10 +108,9 @@ namespace HallDesign
                 r.Width = (Math.Abs(st.X - e.X) / 20) * 20;
                 r.Height = (Math.Abs(st.Y - e.Y) / 20) * 20;
 
-                rows.Text = r.Width.ToString();
                 current = r;
                 updateScreen();
-                drawRect(r, currentAng);
+                drawRect(r, 0);
                 
             }
         }
@@ -133,8 +119,6 @@ namespace HallDesign
         {
             foreach (Block blk in blocks)
             {
-                //curser.Color = blk.c;
-                //drawRect(blk.r, blk.a);
                 using (Graphics gg = Graphics.FromImage(bmp))
                 {
                     drawRect(gg, blk.r, blk.a);
@@ -162,8 +146,10 @@ namespace HallDesign
                     if (blk.r.Contains(click))
                     {
                         selected = blk.r;
+                        toRotate = blk;
                         updateScreen();
-                        g.DrawRectangle(Pens.Blue, Rectangle.Round(selected));
+                        //g.DrawRectangle(Pens.Blue, Rectangle.Round(selected));
+                        drawRect(selected,blk.a);
                         TextRenderer.DrawText(g, $"X:{blk.w},Y:{blk.h}", new Font("Arial", 12, FontStyle.Bold), selected, Color.Red);
                         return;
                     }
@@ -254,6 +240,45 @@ namespace HallDesign
 
             return (Math.Max(r1A.X, r2A.X) < Math.Min(r1B.X, r2B.X) && // width > 0
                      Math.Max(r1A.Y, r2A.Y) < Math.Min(r1B.Y, r2B.Y));  // height > 0
+        }
+
+        private void canvas_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void rotate_Click(object sender, EventArgs e)
+        {
+            if (!painting && selected != null)
+            {
+                try
+                {
+                    int Angle = int.Parse(ang.Text);
+                    //toRotate.a = Angle;
+                    updateScreen();
+                    int shift = 5 * toRotate.h;
+                    if (Angle < 0)
+                    {
+                        shift *= -1;
+                    }
+
+                    
+                    Point lb = new Point(selected.Left,selected.Bottom),
+                          rb = new Point(selected.Right,selected.Bottom),
+                          lt = new Point(selected.Left + shift, selected.Top),
+                          rt = new Point(selected.Right + shift, selected.Top);
+                    g.DrawPolygon(curser,new PointF[] { lb,rb , rt ,lt });
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Provide an Angle to rotate!");
+                }
+                finally
+                {
+                    ang.Text = "Angle";
+                }
+            }
+            
         }
     }
 }

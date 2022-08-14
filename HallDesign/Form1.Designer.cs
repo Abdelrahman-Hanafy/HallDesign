@@ -30,21 +30,17 @@ namespace HallDesign
         private void InitializeComponent()
         {
             this.canvas = new System.Windows.Forms.Panel();
+            this.n = new System.Windows.Forms.Label();
+            this.name = new System.Windows.Forms.TextBox();
             this.finish = new System.Windows.Forms.Button();
             this.colorBalet = new System.Windows.Forms.Panel();
             this.black = new System.Windows.Forms.PictureBox();
             this.yellow = new System.Windows.Forms.PictureBox();
             this.red = new System.Windows.Forms.PictureBox();
             this.clear = new System.Windows.Forms.Button();
-            this.cols = new System.Windows.Forms.TextBox();
-            this.rows = new System.Windows.Forms.TextBox();
-            this.angle = new System.Windows.Forms.TextBox();
             this.save = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.name = new System.Windows.Forms.TextBox();
-            this.n = new System.Windows.Forms.Label();
+            this.ang = new System.Windows.Forms.TextBox();
+            this.rotate = new System.Windows.Forms.Button();
             this.colorBalet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.black)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellow)).BeginInit();
@@ -53,20 +49,35 @@ namespace HallDesign
             // 
             // canvas
             // 
-            this.canvas.AutoSize = true;
             this.canvas.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.canvas.BackColor = System.Drawing.Color.White;
-            this.canvas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.canvas.Location = new System.Drawing.Point(0, 0);
+            this.canvas.Location = new System.Drawing.Point(0, 43);
             this.canvas.Margin = new System.Windows.Forms.Padding(5);
             this.canvas.Name = "canvas";
             this.canvas.Padding = new System.Windows.Forms.Padding(5);
-            this.canvas.Size = new System.Drawing.Size(982, 584);
+            this.canvas.Size = new System.Drawing.Size(982, 536);
             this.canvas.TabIndex = 0;
+            this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.canvas_Paint);
             this.canvas.MouseClick += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseClick);
             this.canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseDown);
             this.canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseMove);
             this.canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseUp);
+            // 
+            // n
+            // 
+            this.n.AutoSize = true;
+            this.n.Location = new System.Drawing.Point(697, 15);
+            this.n.Name = "n";
+            this.n.Size = new System.Drawing.Size(51, 20);
+            this.n.TabIndex = 13;
+            this.n.Text = "Name";
+            // 
+            // name
+            // 
+            this.name.Location = new System.Drawing.Point(754, 12);
+            this.name.Name = "name";
+            this.name.Size = new System.Drawing.Size(129, 26);
+            this.name.TabIndex = 12;
             // 
             // finish
             // 
@@ -128,35 +139,9 @@ namespace HallDesign
             this.clear.UseVisualStyleBackColor = true;
             this.clear.Click += new System.EventHandler(this.clear_Click);
             // 
-            // cols
-            // 
-            this.cols.ForeColor = System.Drawing.Color.Black;
-            this.cols.Location = new System.Drawing.Point(936, 9);
-            this.cols.Name = "cols";
-            this.cols.Size = new System.Drawing.Size(34, 26);
-            this.cols.TabIndex = 3;
-            this.cols.Text = "NA";
-            // 
-            // rows
-            // 
-            this.rows.ForeColor = System.Drawing.Color.Black;
-            this.rows.Location = new System.Drawing.Point(850, 9);
-            this.rows.Name = "rows";
-            this.rows.Size = new System.Drawing.Size(34, 26);
-            this.rows.TabIndex = 4;
-            this.rows.Text = "NA";
-            // 
-            // angle
-            // 
-            this.angle.Location = new System.Drawing.Point(755, 10);
-            this.angle.Name = "angle";
-            this.angle.Size = new System.Drawing.Size(34, 26);
-            this.angle.TabIndex = 6;
-            this.angle.Text = "0";
-            // 
             // save
             // 
-            this.save.Location = new System.Drawing.Point(259, 7);
+            this.save.Location = new System.Drawing.Point(889, 9);
             this.save.Name = "save";
             this.save.Size = new System.Drawing.Size(75, 32);
             this.save.TabIndex = 8;
@@ -164,64 +149,37 @@ namespace HallDesign
             this.save.UseVisualStyleBackColor = true;
             this.save.Click += new System.EventHandler(this.save_Click);
             // 
-            // label1
+            // ang
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(699, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 20);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Angle";
+            this.ang.BackColor = System.Drawing.SystemColors.Window;
+            this.ang.ForeColor = System.Drawing.Color.DarkGray;
+            this.ang.Location = new System.Drawing.Point(276, 10);
+            this.ang.Name = "ang";
+            this.ang.Size = new System.Drawing.Size(129, 26);
+            this.ang.TabIndex = 14;
+            this.ang.Text = "Angle";
             // 
-            // label2
+            // rotate
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(890, 15);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 20);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "Cols";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(795, 16);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 20);
-            this.label3.TabIndex = 11;
-            this.label3.Text = "Rows";
-            // 
-            // name
-            // 
-            this.name.Location = new System.Drawing.Point(564, 10);
-            this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(129, 26);
-            this.name.TabIndex = 12;
-            // 
-            // n
-            // 
-            this.n.AutoSize = true;
-            this.n.Location = new System.Drawing.Point(507, 16);
-            this.n.Name = "n";
-            this.n.Size = new System.Drawing.Size(51, 20);
-            this.n.TabIndex = 13;
-            this.n.Text = "Name";
+            this.rotate.Location = new System.Drawing.Point(411, 7);
+            this.rotate.Name = "rotate";
+            this.rotate.Size = new System.Drawing.Size(75, 32);
+            this.rotate.TabIndex = 15;
+            this.rotate.Text = "Rotate";
+            this.rotate.UseVisualStyleBackColor = true;
+            this.rotate.Click += new System.EventHandler(this.rotate_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 584);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.n);
-            this.Controls.Add(this.name);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.rotate);
+            this.Controls.Add(this.ang);
             this.Controls.Add(this.save);
-            this.Controls.Add(this.angle);
-            this.Controls.Add(this.rows);
-            this.Controls.Add(this.cols);
             this.Controls.Add(this.clear);
+            this.Controls.Add(this.name);
+            this.Controls.Add(this.n);
             this.Controls.Add(this.finish);
             this.Controls.Add(this.colorBalet);
             this.Controls.Add(this.canvas);
@@ -248,15 +206,11 @@ namespace HallDesign
         private System.Windows.Forms.PictureBox red;
         private System.Windows.Forms.Button finish;
         private System.Windows.Forms.Button clear;
-        private System.Windows.Forms.TextBox cols;
-        private System.Windows.Forms.TextBox rows;
-        private System.Windows.Forms.TextBox angle;
         private System.Windows.Forms.Button save;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox name;
         private System.Windows.Forms.Label n;
+        private System.Windows.Forms.TextBox ang;
+        private System.Windows.Forms.Button rotate;
     }
 }
 
