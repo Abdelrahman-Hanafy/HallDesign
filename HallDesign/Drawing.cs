@@ -15,14 +15,14 @@ namespace HallDesign
         DataBase db;
 
         int size;
+        int angle;
 
         bool curserMoving = false;
         bool painting = true;
-
+        int screenCnt;
         Point st;
       
         Rectangle current;
-
         Block selected;
         List<Block> blocks;
 
@@ -42,6 +42,8 @@ namespace HallDesign
             db = DataBase.ConnectDB();
             
             size = int.Parse(ConfigurationSettings.AppSettings["SIZE"]);
+            angle = int.Parse(ConfigurationSettings.AppSettings["Angle"]);
+            screenCnt = 0;
         }
 
         private void color_Click(object sender, EventArgs e)
@@ -63,32 +65,37 @@ namespace HallDesign
             curserMoving = false;
             if (painting)
             {
-                try
-                {
-                    if (painting)
+
+                foreach (Block rect in blocks){
+                    if (isOverlap(rect.r))
                     {
-                        foreach (Block rect in blocks)
-                        {
-                            if (isOverlap(rect.r))
-                            {
-                                MessageBox.Show("Can not add this rectangle as it overlap with drawn one!!");
-                                updateScreen();
-                                return;
-                            }
-                        }
-
-                        blocks.Add(new Block(current, curser.Color, current.Width/ size, current.Height/ size, 0));                     
+                        MessageBox.Show("Can not add this rectangle as it overlap with drawn one!!");
+                        updateScreen();
+                        return;
                     }
-
-
                 }
-                catch (Exception)
+
+                if (curser.Color == Color.Yellow )
                 {
-                    MessageBox.Show("Provide the full data about the block!!");
-                    updateScreen();
+                    if (screenCnt == 0) { 
+                        screenCnt++;
+                        blocks.Add(new Block(current, curser.Color, current.Width / size, current.Height / size, 0,true));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Can not add this Screen as it has been drawn!!");
+                        updateScreen();
+                        return;
+                    }
                 }
+                else
+                {
+                    blocks.Add(new Block(current, curser.Color, current.Width / size, current.Height / size, 0,false));
+
+                }
+               
+
             }
-            
 
         }
 
@@ -128,8 +135,6 @@ namespace HallDesign
             painting = true;
         }
 
-        
-
         private void canvas_MouseClick(object sender, MouseEventArgs e)
         {
             if (!painting)
@@ -141,7 +146,10 @@ namespace HallDesign
                     {
                         selected = blk;
                         updateScreen();
-                        TextRenderer.DrawText(g, $"X:{blk.w},Y:{blk.h}", new Font("Arial", 12, FontStyle.Bold), blk.r, Color.Red);
+                        string tmp = "";
+                        if (selected.sc) tmp = "Screen";
+                        else tmp = $"Cols:{blk.w},Rows:{blk.h}";
+                        TextRenderer.DrawText(g,tmp , new Font("Arial", 12, FontStyle.Bold), blk.r, Color.Red);
                         return;
                     }
                 }
@@ -157,9 +165,7 @@ namespace HallDesign
             {
                 using (Graphics gg = Graphics.FromImage(bmp))
                 {
-                    curser.Color = blk.c;
-
-                        drawRect(gg, blk);
+                    drawRect(gg, blk,blk.c);
                 }
             }
 
@@ -201,57 +207,31 @@ namespace HallDesign
            
             foreach (Block blk in blocks)
             {
-                
-                curser.Color = blk.c;
-                if (blk.a == 0)
-                {
-                    drawRect(blk);
-                }
-                else
-                {
-                    drawRect(g,blk);
 
-                }
+                drawRect(g,blk,blk.c);
             }
 
         }
 
 
-        private void drawRect(Graphics graph,Block blk)
+        private void drawRect(Graphics graph,Block blk,Color c)
         {
 
             Point lb = new Point(blk.r.Left, blk.r.Bottom),
                           rb = new Point(blk.r.Right, blk.r.Bottom),
                           lt = new Point(blk.r.Left + blk.a, blk.r.Top),
                           rt = new Point(blk.r.Right + blk.a, blk.r.Top);
-            graph.DrawPolygon(curser, new PointF[] { lb, rb, rt, lt });
+            graph.DrawPolygon(new Pen(c, 5), new PointF[] { lb, rb, rt, lt });
 
         }
-
-        private void drawRect(Block blk)
-        {
-
-                g.DrawRectangle(curser, blk.r);
-
-        }
-
 
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (!painting && selected != null)
             {
-                try
-                {
-                    int Angle = -1;
-                    selected.a += Angle;
-                    updateScreen();
-
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Provide an Angle to rotate!");
-                }
+                selected.a -= angle;
+                updateScreen();
 
             }
         }
@@ -260,18 +240,20 @@ namespace HallDesign
         {
             if (!painting && selected != null)
             {
-                try
-                {
-                    int Angle = 1;
-                    selected.a += Angle;
-                    updateScreen();
 
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Provide an Angle to rotate!");
-                }
+                selected.a += angle;
+                updateScreen();
+            }
+        }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (!painting && selected != null)
+            {
+                blocks.Remove(selected);
+                if (selected.c == Color.Yellow) screenCnt--;
+                selected = null;
+                updateScreen();
             }
         }
 
@@ -285,7 +267,5 @@ namespace HallDesign
             return (Math.Max(r1A.X, r2A.X) < Math.Min(r1B.X, r2B.X) && // width > 0
                      Math.Max(r1A.Y, r2A.Y) < Math.Min(r1B.Y, r2B.Y));  // height > 0
         }
-
-
     }
 }

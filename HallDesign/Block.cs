@@ -14,15 +14,18 @@ namespace HallDesign
         public int w { get; set; }
         public int h {get; set;}
         public int a { get; set; }
-
-        public Block(Rectangle rect,Color color, int width, int height, int angle)
+        public bool sc;
+        public Block(Rectangle rect,Color color, int width, int height, int angle,bool isScreen)
         {
+            sc = isScreen;
             r = rect;
             c = color;
             w = width;
             h = height;
             a = angle;
         }
+
+        
 
 
     }

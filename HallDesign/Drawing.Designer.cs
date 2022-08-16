@@ -42,6 +42,9 @@ namespace HallDesign
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.colorBalet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.black)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellow)).BeginInit();
@@ -80,7 +83,7 @@ namespace HallDesign
             // 
             // finish
             // 
-            this.finish.Location = new System.Drawing.Point(75, 7);
+            this.finish.Location = new System.Drawing.Point(167, 7);
             this.finish.Name = "finish";
             this.finish.Size = new System.Drawing.Size(69, 33);
             this.finish.TabIndex = 1;
@@ -92,15 +95,15 @@ namespace HallDesign
             // 
             this.colorBalet.Controls.Add(this.black);
             this.colorBalet.Controls.Add(this.yellow);
-            this.colorBalet.Location = new System.Drawing.Point(12, 12);
+            this.colorBalet.Location = new System.Drawing.Point(59, 10);
             this.colorBalet.Name = "colorBalet";
-            this.colorBalet.Size = new System.Drawing.Size(57, 28);
+            this.colorBalet.Size = new System.Drawing.Size(53, 28);
             this.colorBalet.TabIndex = 0;
             // 
             // black
             // 
             this.black.BackColor = System.Drawing.Color.Black;
-            this.black.Location = new System.Drawing.Point(29, 4);
+            this.black.Location = new System.Drawing.Point(29, 3);
             this.black.Name = "black";
             this.black.Size = new System.Drawing.Size(20, 20);
             this.black.TabIndex = 3;
@@ -119,7 +122,7 @@ namespace HallDesign
             // 
             // clear
             // 
-            this.clear.Location = new System.Drawing.Point(307, 7);
+            this.clear.Location = new System.Drawing.Point(399, 7);
             this.clear.Name = "clear";
             this.clear.Size = new System.Drawing.Size(66, 33);
             this.clear.TabIndex = 2;
@@ -139,9 +142,9 @@ namespace HallDesign
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(535, 7);
+            this.button1.Location = new System.Drawing.Point(569, 7);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 32);
+            this.button1.Size = new System.Drawing.Size(43, 32);
             this.button1.TabIndex = 16;
             this.button1.Text = "<--";
             this.button1.UseVisualStyleBackColor = true;
@@ -149,9 +152,9 @@ namespace HallDesign
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(616, 7);
+            this.button2.Location = new System.Drawing.Point(618, 7);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 32);
+            this.button2.Size = new System.Drawing.Size(41, 32);
             this.button2.TabIndex = 17;
             this.button2.Text = "-->";
             this.button2.UseVisualStyleBackColor = true;
@@ -159,16 +162,17 @@ namespace HallDesign
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(222, 7);
+            this.button3.Location = new System.Drawing.Point(314, 7);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(83, 33);
             this.button3.TabIndex = 18;
             this.button3.Text = "Remove";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(147, 7);
+            this.button4.Location = new System.Drawing.Point(239, 7);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(69, 33);
             this.button4.TabIndex = 19;
@@ -176,11 +180,41 @@ namespace HallDesign
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(505, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(58, 20);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "Rotate";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(118, 12);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 20);
+            this.label2.TabIndex = 21;
+            this.label2.Text = "Blk";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(16, 13);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(33, 20);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "Scr";
+            // 
             // Drawing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 584);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button1);
@@ -196,7 +230,6 @@ namespace HallDesign
             this.Name = "Drawing";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Hall Design";
-            this.TopMost = true;
             this.colorBalet.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.black)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellow)).EndInit();
@@ -220,6 +253,9 @@ namespace HallDesign
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
 
