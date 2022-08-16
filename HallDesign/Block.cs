@@ -13,9 +13,9 @@ namespace HallDesign
         public Color c { get; set; }
         public int w { get; set; }
         public int h {get; set;}
-        public float a { get; set; }
+        public int a { get; set; }
 
-        public Block(Rectangle rect,Color color, int width, int height, float angle)
+        public Block(Rectangle rect,Color color, int width, int height, int angle)
         {
             r = rect;
             c = color;

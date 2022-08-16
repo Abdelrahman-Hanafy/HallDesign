@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-using System.Windows.Shapes;
-using Rectangle = System.Drawing.Rectangle;
 
 namespace HallDesign
 {
-    public partial class Form1 : Form
+    public partial class Drawing : Form
     {
         Graphics g;
         Pen curser;
         DataBase db;
+
+        int size;
 
         bool curserMoving = false;
         bool painting = true;
@@ -22,15 +22,14 @@ namespace HallDesign
         Point st;
       
         Rectangle current;
-        Rectangle selected;
-        Polygon ply;
 
-        Block toRotate;
+        Block selected;
         List<Block> blocks;
 
         Bitmap bmp;
 
-        public Form1()
+        [Obsolete]
+        public Drawing()
         {
             InitializeComponent();
 
@@ -42,6 +41,7 @@ namespace HallDesign
 
             db = DataBase.ConnectDB();
             
+            size = int.Parse(ConfigurationSettings.AppSettings["SIZE"]);
         }
 
         private void color_Click(object sender, EventArgs e)
@@ -65,9 +65,6 @@ namespace HallDesign
             {
                 try
                 {
-                    //width = int.Parse(cols.Text);
-                    //height = int.Parse(rows.Text);
-
                     if (painting)
                     {
                         foreach (Block rect in blocks)
@@ -80,7 +77,7 @@ namespace HallDesign
                             }
                         }
 
-                        blocks.Add(new Block(current, curser.Color, current.Width/20, current.Height/20, 0));                     
+                        blocks.Add(new Block(current, curser.Color, current.Width/ size, current.Height/ size, 0));                     
                     }
 
 
@@ -103,12 +100,12 @@ namespace HallDesign
                 Rectangle r = new Rectangle();
                 r.X = Math.Min(st.X, e.X);
                 r.Y = Math.Min(st.Y, e.Y);
-                r.Width = (Math.Abs(st.X - e.X) / 20) * 20;
-                r.Height = (Math.Abs(st.Y - e.Y) / 20) * 20;
+                r.Width = (Math.Abs(st.X - e.X) / size) * size;
+                r.Height = (Math.Abs(st.Y - e.Y) / size) * size;
 
                 current = r;
                 updateScreen();
-                drawRect(r, 0);
+                g.DrawRectangle(curser,r);
                 
             }
         }
@@ -116,7 +113,12 @@ namespace HallDesign
         private void finish_Click(object sender, EventArgs e)
         {
             
-            painting = !painting;
+            painting = false;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            painting = true;
         }
 
         private void clear_Click(object sender, EventArgs e)
@@ -137,11 +139,9 @@ namespace HallDesign
                 {
                     if (blk.r.Contains(click))
                     {
-                        selected = blk.r;
-                        toRotate = blk;
+                        selected = blk;
                         updateScreen();
-                        //drawRect(selected,blk.a);
-                        TextRenderer.DrawText(g, $"X:{blk.w},Y:{blk.h}", new Font("Arial", 12, FontStyle.Bold), selected, Color.Red);
+                        TextRenderer.DrawText(g, $"X:{blk.w},Y:{blk.h}", new Font("Arial", 12, FontStyle.Bold), blk.r, Color.Red);
                         return;
                     }
                 }
@@ -158,25 +158,8 @@ namespace HallDesign
                 using (Graphics gg = Graphics.FromImage(bmp))
                 {
                     curser.Color = blk.c;
-                    if (blk.a == 0)
-                    {
-                        drawRect(gg, blk.r, blk.a);
-                    }
-                    else
-                    {
-                        int shift = 5 * toRotate.h;
-                        if (blk.a < 0)
-                        {
-                            shift *= -1;
-                        }
 
-
-                        Point lb = new Point(blk.r.Left, blk.r.Bottom),
-                              rb = new Point(blk.r.Right, blk.r.Bottom),
-                              lt = new Point(blk.r.Left + shift, blk.r.Top),
-                              rt = new Point(blk.r.Right + shift, blk.r.Top);
-                        gg.DrawPolygon(curser, new PointF[] { lb, rb, rt, lt });
-                    }
+                        drawRect(gg, blk);
                 }
             }
 
@@ -222,52 +205,74 @@ namespace HallDesign
                 curser.Color = blk.c;
                 if (blk.a == 0)
                 {
-                    drawRect(blk.r, blk.a);
+                    drawRect(blk);
                 }
                 else
                 {
-                    int shift = 5 * toRotate.h;
-                    if (blk.a < 0)
-                    {
-                        shift *= -1;
-                    }
+                    drawRect(g,blk);
 
-
-                    Point lb = new Point(blk.r.Left, blk.r.Bottom),
-                          rb = new Point(blk.r.Right, blk.r.Bottom),
-                          lt = new Point(blk.r.Left + shift, blk.r.Top),
-                          rt = new Point(blk.r.Right + shift, blk.r.Top);
-                    g.DrawPolygon(curser, new PointF[] { lb, rb, rt, lt });
                 }
             }
 
         }
 
 
-        private void drawRect(Graphics graph,Rectangle r, float angle)
+        private void drawRect(Graphics graph,Block blk)
         {
-            using (Matrix m = new Matrix())
-            {
-                m.RotateAt(angle, new PointF(r.Left + (r.Width / 2),
-                                          r.Top + (r.Height / 2)));
-                graph.Transform = m;
-                graph.DrawRectangle(curser, r);
-                graph.ResetTransform();
-            }
+
+            Point lb = new Point(blk.r.Left, blk.r.Bottom),
+                          rb = new Point(blk.r.Right, blk.r.Bottom),
+                          lt = new Point(blk.r.Left + blk.a, blk.r.Top),
+                          rt = new Point(blk.r.Right + blk.a, blk.r.Top);
+            graph.DrawPolygon(curser, new PointF[] { lb, rb, rt, lt });
 
         }
 
-        private void drawRect(Rectangle r, float angle)
+        private void drawRect(Block blk)
         {
-            using (Matrix m = new Matrix())
-            {
-                m.RotateAt(angle, new PointF(r.Left + (r.Width / 2),
-                                          r.Top + (r.Height / 2)));
-                g.Transform = m;
-                g.DrawRectangle(curser, r);
-                g.ResetTransform();
-            }
 
+                g.DrawRectangle(curser, blk.r);
+
+        }
+
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!painting && selected != null)
+            {
+                try
+                {
+                    int Angle = -1;
+                    selected.a += Angle;
+                    updateScreen();
+
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Provide an Angle to rotate!");
+                }
+
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (!painting && selected != null)
+            {
+                try
+                {
+                    int Angle = 1;
+                    selected.a += Angle;
+                    updateScreen();
+
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Provide an Angle to rotate!");
+                }
+
+            }
         }
 
         private bool isOverlap(Rectangle r)
@@ -281,32 +286,6 @@ namespace HallDesign
                      Math.Max(r1A.Y, r2A.Y) < Math.Min(r1B.Y, r2B.Y));  // height > 0
         }
 
-        private void canvas_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
-
-        private void rotate_Click(object sender, EventArgs e)
-        {
-            if (!painting && selected != null)
-            {
-                try
-                {
-                    int Angle = int.Parse(ang.Text);
-                    toRotate.a = Angle;
-                    updateScreen();
-                    
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Provide an Angle to rotate!");
-                }
-                finally
-                {
-                    ang.Text = "Angle";
-                }
-            }
-            
-        }
     }
 }

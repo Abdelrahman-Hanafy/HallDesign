@@ -1,7 +1,7 @@
 ﻿
 namespace HallDesign
 {
-    partial class Form1
+    partial class Drawing
     {
         /// <summary>
         /// Required designer variable.
@@ -36,15 +36,15 @@ namespace HallDesign
             this.colorBalet = new System.Windows.Forms.Panel();
             this.black = new System.Windows.Forms.PictureBox();
             this.yellow = new System.Windows.Forms.PictureBox();
-            this.red = new System.Windows.Forms.PictureBox();
             this.clear = new System.Windows.Forms.Button();
             this.save = new System.Windows.Forms.Button();
-            this.ang = new System.Windows.Forms.TextBox();
-            this.rotate = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.colorBalet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.black)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellow)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.red)).BeginInit();
             this.SuspendLayout();
             // 
             // canvas
@@ -57,7 +57,6 @@ namespace HallDesign
             this.canvas.Padding = new System.Windows.Forms.Padding(5);
             this.canvas.Size = new System.Drawing.Size(982, 536);
             this.canvas.TabIndex = 0;
-            this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.canvas_Paint);
             this.canvas.MouseClick += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseClick);
             this.canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseDown);
             this.canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseMove);
@@ -81,9 +80,9 @@ namespace HallDesign
             // 
             // finish
             // 
-            this.finish.Location = new System.Drawing.Point(97, 7);
+            this.finish.Location = new System.Drawing.Point(75, 7);
             this.finish.Name = "finish";
-            this.finish.Size = new System.Drawing.Size(75, 33);
+            this.finish.Size = new System.Drawing.Size(69, 33);
             this.finish.TabIndex = 1;
             this.finish.Text = "Finish";
             this.finish.UseVisualStyleBackColor = true;
@@ -93,16 +92,15 @@ namespace HallDesign
             // 
             this.colorBalet.Controls.Add(this.black);
             this.colorBalet.Controls.Add(this.yellow);
-            this.colorBalet.Controls.Add(this.red);
             this.colorBalet.Location = new System.Drawing.Point(12, 12);
             this.colorBalet.Name = "colorBalet";
-            this.colorBalet.Size = new System.Drawing.Size(79, 28);
+            this.colorBalet.Size = new System.Drawing.Size(57, 28);
             this.colorBalet.TabIndex = 0;
             // 
             // black
             // 
             this.black.BackColor = System.Drawing.Color.Black;
-            this.black.Location = new System.Drawing.Point(55, 3);
+            this.black.Location = new System.Drawing.Point(29, 4);
             this.black.Name = "black";
             this.black.Size = new System.Drawing.Size(20, 20);
             this.black.TabIndex = 3;
@@ -112,28 +110,18 @@ namespace HallDesign
             // yellow
             // 
             this.yellow.BackColor = System.Drawing.Color.Yellow;
-            this.yellow.Location = new System.Drawing.Point(29, 3);
+            this.yellow.Location = new System.Drawing.Point(3, 3);
             this.yellow.Name = "yellow";
             this.yellow.Size = new System.Drawing.Size(20, 20);
             this.yellow.TabIndex = 2;
             this.yellow.TabStop = false;
             this.yellow.Click += new System.EventHandler(this.color_Click);
             // 
-            // red
-            // 
-            this.red.BackColor = System.Drawing.Color.Red;
-            this.red.Location = new System.Drawing.Point(3, 3);
-            this.red.Name = "red";
-            this.red.Size = new System.Drawing.Size(20, 20);
-            this.red.TabIndex = 1;
-            this.red.TabStop = false;
-            this.red.Click += new System.EventHandler(this.color_Click);
-            // 
             // clear
             // 
-            this.clear.Location = new System.Drawing.Point(178, 7);
+            this.clear.Location = new System.Drawing.Point(307, 7);
             this.clear.Name = "clear";
-            this.clear.Size = new System.Drawing.Size(75, 33);
+            this.clear.Size = new System.Drawing.Size(66, 33);
             this.clear.TabIndex = 2;
             this.clear.Text = "Clear";
             this.clear.UseVisualStyleBackColor = true;
@@ -149,33 +137,54 @@ namespace HallDesign
             this.save.UseVisualStyleBackColor = true;
             this.save.Click += new System.EventHandler(this.save_Click);
             // 
-            // ang
+            // button1
             // 
-            this.ang.BackColor = System.Drawing.SystemColors.Window;
-            this.ang.ForeColor = System.Drawing.Color.DarkGray;
-            this.ang.Location = new System.Drawing.Point(276, 10);
-            this.ang.Name = "ang";
-            this.ang.Size = new System.Drawing.Size(129, 26);
-            this.ang.TabIndex = 14;
-            this.ang.Text = "Angle";
+            this.button1.Location = new System.Drawing.Point(535, 7);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 32);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "<--";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // rotate
+            // button2
             // 
-            this.rotate.Location = new System.Drawing.Point(411, 7);
-            this.rotate.Name = "rotate";
-            this.rotate.Size = new System.Drawing.Size(75, 32);
-            this.rotate.TabIndex = 15;
-            this.rotate.Text = "Rotate";
-            this.rotate.UseVisualStyleBackColor = true;
-            this.rotate.Click += new System.EventHandler(this.rotate_Click);
+            this.button2.Location = new System.Drawing.Point(616, 7);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 32);
+            this.button2.TabIndex = 17;
+            this.button2.Text = "-->";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // Form1
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(222, 7);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(83, 33);
+            this.button3.TabIndex = 18;
+            this.button3.Text = "Remove";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(147, 7);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(69, 33);
+            this.button4.TabIndex = 19;
+            this.button4.Text = "Edit";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // Drawing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 584);
-            this.Controls.Add(this.rotate);
-            this.Controls.Add(this.ang);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.save);
             this.Controls.Add(this.clear);
             this.Controls.Add(this.name);
@@ -184,14 +193,13 @@ namespace HallDesign
             this.Controls.Add(this.colorBalet);
             this.Controls.Add(this.canvas);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "Form1";
+            this.Name = "Drawing";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Hall Design";
             this.TopMost = true;
             this.colorBalet.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.black)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellow)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.red)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,14 +211,15 @@ namespace HallDesign
         private System.Windows.Forms.Panel colorBalet;
         private System.Windows.Forms.PictureBox black;
         private System.Windows.Forms.PictureBox yellow;
-        private System.Windows.Forms.PictureBox red;
         private System.Windows.Forms.Button finish;
         private System.Windows.Forms.Button clear;
         private System.Windows.Forms.Button save;
         private System.Windows.Forms.TextBox name;
         private System.Windows.Forms.Label n;
-        private System.Windows.Forms.TextBox ang;
-        private System.Windows.Forms.Button rotate;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }
 
