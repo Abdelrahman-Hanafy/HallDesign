@@ -66,10 +66,11 @@ namespace HallDesign
             if (painting)
             {
 
-                foreach (Block rect in blocks){
-                    if (isOverlap(rect.r))
+                foreach (Block blk in blocks){
+                    if (isOverlap(blk.r,current))
                     {
                         MessageBox.Show("Can not add this rectangle as it overlap with drawn one!!");
+                        
                         updateScreen();
                         return;
                     }
@@ -79,11 +80,12 @@ namespace HallDesign
                 {
                     if (screenCnt == 0) { 
                         screenCnt++;
-                        blocks.Add(new Block(current, curser.Color, current.Width / size, current.Height / size, 0,true));
+                        blocks.Add(new Block(current, curser.Color, 0, 0, 0,true));
                     }
                     else
                     {
                         MessageBox.Show("Can not add this Screen as it has been drawn!!");
+                        
                         updateScreen();
                         return;
                     }
@@ -96,6 +98,7 @@ namespace HallDesign
                
 
             }
+            
 
         }
 
@@ -146,10 +149,7 @@ namespace HallDesign
                     {
                         selected = blk;
                         updateScreen();
-                        string tmp = "";
-                        if (selected.sc) tmp = "Screen";
-                        else tmp = $"Cols:{blk.w},Rows:{blk.h}";
-                        TextRenderer.DrawText(g,tmp , new Font("Arial", 12, FontStyle.Bold), blk.r, Color.Red);
+                        
                         return;
                     }
                 }
@@ -204,11 +204,33 @@ namespace HallDesign
         private void updateScreen()
         {
             g.Clear(Color.White);
-           
+
             foreach (Block blk in blocks)
             {
+                
+                if (!painting)
+                {
+                    if(isOverlap(blk))
+                    {
+                        MessageBox.Show("can't to rotate as it will make overlap");
+                        if (blk.a > 0) blk.a -= angle;
+                        else if (blk.a < 0) blk.a += angle;
+                    }
+                    drawRect(g, blk, blk.c);
+                    
+                }
+                    
+                else
+                    drawRect(g, blk, blk.c);
 
-                drawRect(g,blk,blk.c);
+            }
+            if (selected != null)
+            {
+                string tmp;
+                if (selected.sc) tmp = "Screen";
+                else tmp = $"Cols:{selected.w},Rows:{selected.h}";
+                drawRect(g, selected, Color.Red);
+                TextRenderer.DrawText(g, tmp, new Font("Arial", 12, FontStyle.Bold), selected.r, Color.Red);
             }
 
         }
@@ -257,12 +279,39 @@ namespace HallDesign
             }
         }
 
-        private bool isOverlap(Rectangle r)
+        private bool isOverlap(Block blk)
+        {
+            bool flg = false;
+            Rectangle r = new Rectangle();
+            r.X = blk.r.Left + blk.a;
+            r.Y = blk.r.Top;
+            r.Height = blk.r.Bottom - blk.r.Top;
+            r.Width = blk.r.Right + blk.a - r.X;
+
+            foreach (Block b in blocks)
+            {
+                if(b != blk)
+                {
+                    Rectangle r2 = new Rectangle();
+                    r2.X = b.r.Left + b.a;
+                    r2.Y = b.r.Top;
+                    r2.Height = b.r.Bottom - b.r.Top;
+                    r2.Width = b.r.Right + b.a - r.X;
+
+                    flg = isOverlap(r2,r);
+                    if (flg) break;
+                }
+            }
+            return flg;
+            
+        }
+
+        private bool isOverlap(Rectangle r, Rectangle c)
         {
             Point r1A = new Point(r.X, r.Y),
-                r2A = new Point(current.X, current.Y),
+                r2A = new Point(c.X, c.Y),
                 r1B = new Point(r.Right, r.Bottom),
-                r2B = new Point(current.Right, current.Bottom);
+                r2B = new Point(c.Right, c.Bottom);
 
             return (Math.Max(r1A.X, r2A.X) < Math.Min(r1B.X, r2B.X) && // width > 0
                      Math.Max(r1A.Y, r2A.Y) < Math.Min(r1B.Y, r2B.Y));  // height > 0
